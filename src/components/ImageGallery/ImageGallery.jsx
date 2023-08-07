@@ -3,7 +3,7 @@ import { ImageGalleryItem } from "../ImageGalleryItem/ImageGalleryItem";
 import PropTypes from 'prop-types';
 
 
- export const CreateGallery = ({ hits  }) => {
+export const CreateGallery = ({ hits  }) => {
     
     return (
         <ImgGalleryUl >
@@ -12,9 +12,9 @@ import PropTypes from 'prop-types';
                     < ImageGalleryItem
                     key={hit.id}
                     hit={hit}
-                 />)    
+                />)    
             })}
-         </ImgGalleryUl>)
+        </ImgGalleryUl>)
 }
 CreateGallery.propTypes={
     hits: PropTypes.arrayOf(

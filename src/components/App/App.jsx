@@ -7,7 +7,6 @@ import {Searchbar} from "../Searchbar/Searchbar";
 import {CreateGallery} from "../ImageGallery/ImageGallery";
 import { Button } from "../Button/Button";
 import { Loader } from "../Loader/Loader";
-import * as Scroll from 'react-scroll';
 import * as API from 'services/api'
 
 export default class App extends Component {
@@ -35,30 +34,31 @@ export default class App extends Component {
       if(page ===1){
             toast.success(`Wonderful! We found ${data.totalHits} images! Continue`)
       } else {
-            Scroll.scroller()
-          }
-
+        setTimeout(()=> this.scroll(),100);
+      }
         if (page >= totalPages) {
         toast.info("Sorry! This is the end of search results! Ok")
             }
     }catch (error) {
-      this.setState({ isError: true, isLoading: false });
-    }
+      this.setState({ isError: true, Error});
+    } finally {
+          this.setState({ isLoading: false });
+      }
   };
-
+scroll = () => {
+    const { clientHeight } = document.documentElement;
+    window.scrollBy({
+      top: clientHeight - 180,
+      behavior: 'smooth',
+    });
+  }
   componentDidUpdate(prevProps, prevState) {
     const { searchQuery, page } = this.state;
        if (prevState.searchQuery !== searchQuery || prevState.page !== page) {
        this.fetchData();
     }
     }
-  // scroll = () => {
-  //   const { clientHeight } = document.documentElement;
-  //   window.scrollBy({
-  //     top: clientHeight - 180,
-  //     behavior: 'smooth',
-  //   });
-  // }
+    
   handleSearchQuery = searchQuery => {
     this.setState({ searchQuery, page:1, hits: [] });
   }
@@ -75,8 +75,7 @@ export default class App extends Component {
         <AppSheet>
           {hits.length !== 0 && <CreateGallery hits={hits} />}
           {isLoading ? (<Loader />) :
-            (page < totalPages && hits.length !== 0 && (<Button onLoadMore={this.handleLoadMore} />)
-            )}
+            (page<totalPages && hits.length!==0 &&<Button onLoadMore={this.handleLoadMore} />)}
           </AppSheet>
         <ToastContainer autoClose={3000} />
       </>
